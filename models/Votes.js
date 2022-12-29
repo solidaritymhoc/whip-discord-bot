@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('votes', {
-        vote_id: {
+        id: {
             type: DataTypes.STRING,
             primaryKey: true,
         },

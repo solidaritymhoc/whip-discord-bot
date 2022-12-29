@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 // Import discord.js
-const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, Events, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
 const { token } = require('./config.json');
 
 // Create bot client
@@ -46,10 +46,10 @@ client.on(Events.InteractionCreate, async interaction => {
 });
 
 // Login event
-client.once(Events.ClientReady, c => {
-	console.log(`Ready! Logged in as ${c.user.tag}`);
+client.once(Events.ClientReady, async () => {
+	console.log(`Ready! Logged in as ${client.user.tag}`);
+	client.user.setPresence({ activities: [{ name: 'Pepsiman™️', type: ActivityType.Listening, url: 'https://www.youtube.com/watch?v=z54MpfR3XE4' }], status: 'dnd' });
 });
 
 // Start the bot
 client.login(token);
-
