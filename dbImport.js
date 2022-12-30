@@ -1,30 +1,28 @@
+const { usernames } = require('./mps.json');
 const Sequelize = require('sequelize');
-
 const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
     storage: 'database.sqlite',
 });
-
-const Votes = require('./models/Votes.js')(sequelize, Sequelize.DataTypes);
 const Mps = require('./models/Mps.js')(sequelize, Sequelize.DataTypes);
-
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 
+console.log(`Found ${usernames.length} MPs`);
+
+if (usernames.length === 0) {
+    console.log('No Mps to import. Aborting.');
+    return;
+}
 sequelize.sync({ force }).then(async () => {
-    const votes = [
-        Votes.upsert({ id: 'B1458', whip: 'aye' }),
-    ];
-
-    const mps = [
-        Mps.upsert({ name: 'cocoiadrop_' }),
-        Mps.upsert({ name: 'test' }),
-    ];
-
-    await Promise.all(votes);
-    await Promise.all(mps);
-    console.log('Database synced');
+    for (const username of usernames) {
+        const upsert = Mps.upsert({ name: username });
+        await Promise.resolve(upsert);
+        console.log(`Imported ${username}`);
+    }
+    console.log('Database synced!');
 
     sequelize.close();
 }).catch(console.error);
+
