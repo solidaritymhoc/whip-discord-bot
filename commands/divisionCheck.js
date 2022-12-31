@@ -38,9 +38,11 @@ module.exports = {
 
         let fieldComplyValue = '';
         mpsComplyWhip.forEach(mp => fieldComplyValue += mp[0] + '\n');
+        if (fieldComplyValue === '') fieldComplyValue = 'None';
 
         let fieldAgainstValue = '';
         mpsAgainstWhip.forEach(mp => fieldAgainstValue += mp[0] + ` (${mp[1]})\n`);
+        if (fieldAgainstValue === '') fieldAgainstValue = 'None';
 
         const responseEmbed = new EmbedBuilder()
             .setTitle(`Status of division ${division.id} (${division.url})`)
