@@ -1,3 +1,4 @@
+const { Mps } = require('../dbObjects');
 const { Division } = require('../functions/utils');
 const acceptableWhips = ['aye', 'no', 'abs'];
 
@@ -22,7 +23,22 @@ function getMpsComplyWhip(division, whip) {
     return votes;
 }
 
+async function getMpsDnv(division) {
+    const solMps = (await Mps.findAll()).map(mp => mp.name);
+    division.comments.forEach(c => {
+        solMps.forEach(mp => {
+            if (c[0] === mp) {
+                const index = solMps.indexOf(mp);
+                solMps.splice(index, 1);
+            }
+        });
+    });
+    console.log(solMps);
+    return solMps;
+}
+
 module.exports = {
     getMpsAgainstWhip,
-    getMpsComplyWhip
+    getMpsComplyWhip,
+    getMpsDnv,
 };

@@ -1,8 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { Mps } = require('../dbObjects');
 const { getDivisionVotes } = require('../functions/reddit');
-const { getMpsAgainstWhip, getMpsComplyWhip } = require('../functions/whip');
+const { getMpsAgainstWhip, getMpsComplyWhip, getMpsDnv } = require('../functions/whip');
 const { Division } = require('../functions/utils');
+const escape = require('markdown-escape');
 
 const Commands = {
     Commons: 'commons',
@@ -35,14 +35,19 @@ module.exports = {
 
         const mpsAgainstWhip = getMpsAgainstWhip(division, whip);
         const mpsComplyWhip = getMpsComplyWhip(division, whip);
+        const mpsDnv = await getMpsDnv(division);
 
         let fieldComplyValue = '';
-        mpsComplyWhip.forEach(mp => fieldComplyValue += mp[0] + '\n');
+        mpsComplyWhip.forEach(mp => fieldComplyValue += `${escape(mp[0])} \n`);
         if (fieldComplyValue === '') fieldComplyValue = 'None';
 
         let fieldAgainstValue = '';
-        mpsAgainstWhip.forEach(mp => fieldAgainstValue += mp[0] + ` (${mp[1]})\n`);
+        mpsAgainstWhip.forEach(mp => fieldAgainstValue += `${escape(mp[0])} (${mp[1]}) \n`);
         if (fieldAgainstValue === '') fieldAgainstValue = 'None';
+
+        let fieldDnvValue = '';
+        mpsDnv.forEach(mp => fieldDnvValue += `${escape(mp)} \n`);
+        if (fieldDnvValue === '') fieldDnvValue = 'None';
 
         const responseEmbed = new EmbedBuilder()
             .setTitle(`Status of division ${division.id} (${division.url})`)
@@ -50,6 +55,7 @@ module.exports = {
             .addFields(
                 { name: 'Complying:', value: fieldComplyValue },
                 { name: 'Against:', value: fieldAgainstValue },
+                { name: 'DNV', value: fieldDnvValue },
             );
 
         await interaction.editReply({ embeds: [responseEmbed] });
