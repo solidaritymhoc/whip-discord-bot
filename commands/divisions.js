@@ -16,18 +16,25 @@ module.exports = {
             subcommand
                 .setName('add')
                 .setDescription('Add division')
-                .addStringOption(option => option.setName('reddit_url').setRequired(true).setDescription('Full Reddit URL of the division'))
-                .addStringOption(option => option.setName('whip').setRequired(true).setDescription('Aye, No, Abs').setChoices(
+                .addStringOption(option =>
+                    option.setName('reddit_url').setRequired(true).setDescription('Full Reddit URL of the division')
+                )
+                .addStringOption(option =>
+                    option.setName('whip').setRequired(true).setDescription('Aye, No, Abs').setChoices(
                     { name: 'Aye', value: 'aye' },
                     { name: 'No', value: 'no' },
                     { name: 'Abstain', value: 'abs' },
                 ))
-                .addIntegerOption(option => option.setName('days_ends_in').setDescription('Defaults to 3. Bot will assume ending 10pm UK time.')))
+                .addIntegerOption(option =>
+                    option.setName('days_ends_in').setDescription('Defaults to 3. Bot will assume ending 10pm UK time.')
+                ))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('remove')
                 .setDescription('Remove division')
-                .addStringOption(option => option.setName('division_id').setRequired(true).setDescription('Division ID (Bxxx)').setAutocomplete(true))),
+                .addStringOption(option =>
+                    option.setName('division_id').setRequired(true).setDescription('Division ID (Bxxx)').setAutocomplete(true)
+                )),
     // async autocomplete(interaction) {
     //     console.log('Autocompleting');
     //     const choices = [];
