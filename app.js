@@ -5,6 +5,10 @@ const path = require('node:path');
 // Import discord.js
 const { Client, Events, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
 const { token } = require('./config.json');
+const moment = require('moment-timezone');
+
+// Set moment default time zone
+moment.tz.setDefault('Europe/London');
 
 // Create bot client
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -49,6 +53,10 @@ client.on(Events.InteractionCreate, async interaction => {
 client.once(Events.ClientReady, async () => {
 	console.log(`Ready! Logged in as ${client.user.tag}`);
 	client.user.setPresence({ activities: [{ name: 'Pepsiman™️', type: ActivityType.Listening, url: 'https://www.youtube.com/watch?v=z54MpfR3XE4' }], status: 'dnd' });
+});
+
+client.on('unhandledRejection', error => {
+	console.error('Unhandled promise rejection:', error);
 });
 
 // Start the bot

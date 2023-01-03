@@ -7,8 +7,8 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: 'database.sqlite',
 });
 
-const Votes = require('./models/Votes.js')(sequelize, Sequelize.DataTypes);
 const Mps = require('./models/Mps.js')(sequelize, Sequelize.DataTypes);
+const Division = require('./models/Division')(sequelize, Sequelize.DataTypes);
 //
 // Reflect.defineProperty(Mps.prototype, 'getItems', {
 //    value: () => {
@@ -18,4 +18,4 @@ const Mps = require('./models/Mps.js')(sequelize, Sequelize.DataTypes);
 //    },
 // });
 
-module.exports = { Votes, Mps };
+module.exports = { Division, Mps };

@@ -7,22 +7,27 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: 'database.sqlite',
 });
 
-const Votes = require('./models/Votes.js')(sequelize, Sequelize.DataTypes);
 const Mps = require('./models/Mps.js')(sequelize, Sequelize.DataTypes);
+const Divisions = require('./models/Division')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 
 sequelize.sync({ force }).then(async () => {
-    const votes = [
-        Votes.upsert({ id: 'B1458', whip: 'aye' }),
-    ];
 
     const mps = [
-        Mps.upsert({ name: 'cocoiadrop_' }),
-        Mps.upsert({ name: 'test' }),
+        Mps.upsert({ name: 'SampleMp' }),
     ];
 
-    await Promise.all(votes);
+    const divisions = [
+        Divisions.upsert({
+            id: 'B000',
+            url: 'https://reddit.com/r/mhocmp',
+            end_date: new Date(),
+            whip: 'abs',
+        }),
+    ];
+
+    await Promise.all(divisions);
     await Promise.all(mps);
     console.log('Database synced');
 

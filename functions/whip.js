@@ -33,7 +33,6 @@ async function getMpsDnv(division) {
             }
         });
     });
-    console.log(solMps);
     return solMps;
 }
 
