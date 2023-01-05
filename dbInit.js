@@ -23,7 +23,8 @@ sequelize.sync({ force }).then(async () => {
             id: 'B000',
             url: 'https://reddit.com/r/mhocmp',
             end_date: new Date(),
-            whip: 'abs',
+            whip: 'aye',
+            line: 1,
         }),
     ];
 

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, hyperlink } = require('discord.js');
 const { Division } = require('../dbObjects');
 const { findDivisionByUrl } = require('../functions/reddit');
 const moment = require('moment-timezone');
@@ -17,14 +17,23 @@ module.exports = {
                 .setName('add')
                 .setDescription('Add division')
                 .addStringOption(option =>
-                    option.setName('reddit_url').setRequired(true).setDescription('Full Reddit URL of the division')
+                    option.setName('reddit_url').setRequired(true).setDescription('Full Reddit URL of the division'),
                 )
                 .addStringOption(option =>
                     option.setName('whip').setRequired(true).setDescription('Aye, No, Abs').setChoices(
-                    { name: 'Aye', value: 'aye' },
-                    { name: 'No', value: 'no' },
-                    { name: 'Abstain', value: 'abs' },
-                ))
+                        { name: 'Aye', value: 'aye' },
+                        { name: 'No', value: 'no' },
+                        { name: 'Abstain', value: 'abs' },
+                    ),
+                )
+                .addIntegerOption(option =>
+                    option.setName('line').setRequired(true).setDescription('None, 1, 2, 3').setChoices(
+                        { name: 'None', value: 0 },
+                        { name: '1 Line', value: 1 },
+                        { name: '2 Line', value: 2 },
+                        { name: '3 Line', value: 3 },
+                    ),
+                )
                 .addIntegerOption(option =>
                     option.setName('days_ends_in').setDescription('Defaults to 3. Bot will assume ending 10pm UK time.')
                 ))
@@ -63,8 +72,8 @@ module.exports = {
                     .setDescription('Manage these with the `add` and `remove` subcommands.');
                 currentDivisions.forEach(division => {
                     responseEmbed.addFields({
-                        name: `[${division.id.toString()}](${division.url.toString()}) - Whip **${division.whip.toString().toUpperCase()}**`,
-                        value: `Ends ${moment(division.end_date).format(momentFormat)}`,
+                        name: `${division.id} - ${division.url} - **${division.lineText} line ${division.whip.toString().toUpperCase()}**`,
+                        value: `Ends ${division.end_date.format(momentFormat)}`,
                     });
                 });
                 await interaction.editReply({ embeds: [responseEmbed] });
@@ -74,11 +83,12 @@ module.exports = {
                 await interaction.deferReply();
                 const redditUrl = interaction.options.getString('reddit_url');
                 const whip = interaction.options.getString('whip');
+                const line = interaction.options.getInteger('line');
                 let daysEndsIn = interaction.options.getInteger('days_ends_in');
                 if (daysEndsIn < 1) {
                     daysEndsIn = null;
                 }
-                if (!redditUrl || !whip) {
+                if (!redditUrl || !whip || !line) {
                     await interaction.editReply({ content: 'Please provide a reddit URL and whip setting.', ephemeral: true });
                     return;
                 }
@@ -96,7 +106,8 @@ module.exports = {
                         id: division.id,
                         url: division.url,
                         whip: whip,
-                        end_date: moment().add(daysEndsIn ?? 3, 'days').hour(22).minute(0).second(0).toDate(),
+                        line: line,
+                        end_date: moment().add(daysEndsIn ?? 3, 'days').hour(22).minute(0).second(0),
                     });
                     if (dbDivision === null) {
                         await interaction.editReply('Operation failed.');
