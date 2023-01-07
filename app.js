@@ -1,5 +1,4 @@
-// Import file path libraries and cron
-const cron = require('node-cron');
+// Import file path libraries
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -7,7 +6,6 @@ const path = require('node:path');
 const { Client, Events, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
 const { token } = require('./config.json');
 const moment = require('moment-timezone');
-const { removeExpiredDivisions } = require('./functions/tasks');
 
 // Set moment default time zone
 moment.tz.setDefault('Europe/London');
@@ -56,14 +54,6 @@ client.once(Events.ClientReady, async () => {
 	console.log(`Ready! Logged in as ${client.user.tag}`);
 	client.user.setPresence({ activities: [{ name: 'Pepsiman™️', type: ActivityType.Listening, url: 'https://www.youtube.com/watch?v=z54MpfR3XE4' }], status: 'dnd' });
 });
-
-// Cron job
-const removeExpiredDivisionsTask = cron.schedule('* * * * *', () => removeExpiredDivisions(), {
-	scheduled: true,
-	timezone: 'Europe/London',
-});
-
-removeExpiredDivisionsTask.start();
 
 client.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);

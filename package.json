@@ -13,7 +13,6 @@
     "markdown-escape": "^2.0.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.40",
-    "node-cron": "^3.0.2",
     "octokit": "^2.0.10",
     "sequelize": "^6.28.0",
     "snoowrap": "^1.23.0",
