@@ -58,7 +58,7 @@ client.once(Events.ClientReady, async () => {
 });
 
 // Cron job
-const removeExpiredDivisionsTask = cron.schedule('* * * * *', () => removeExpiredDivisions(), {
+const removeExpiredDivisionsTask = cron.schedule('* * * * * *', async () => await removeExpiredDivisions(), {
 	scheduled: true,
 	timezone: 'Europe/London',
 });
