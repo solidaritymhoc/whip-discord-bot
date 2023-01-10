@@ -4,19 +4,26 @@ const { findDivisionByUrl } = require('../functions/reddit');
 const moment = require('moment-timezone');
 const momentFormat = 'dddd, MMMM Do YYYY, h:mm:ss a';
 
+/**
+ * Commands for managing individual divisions.
+ */
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('divisions')
         .setDescription('Manage divisions')
         .addSubcommand(subcommand =>
+            // View all current divisions
             subcommand
                 .setName('current')
                 .setDescription('View current divisions'))
         .addSubcommand(subcommand =>
+            // Add a new division
             subcommand
                 .setName('add')
                 .setDescription('Add division')
                 .addStringOption(option =>
+                    // https://reddit.com/r/mhocmp/xxxx/xxx...
                     option.setName('reddit_url').setRequired(true).setDescription('Full Reddit URL of the division'),
                 )
                 .addStringOption(option =>
@@ -38,10 +45,12 @@ module.exports = {
                     option.setName('days_ends_in').setDescription('Defaults to 3. Bot will assume ending 10pm UK time.'),
                 ))
         .addSubcommand(subcommand =>
+            // Remove a division
             subcommand
                 .setName('remove')
                 .setDescription('Remove division')
                 .addStringOption(option =>
+                    // B1xxx
                     option.setName('division_id').setRequired(true).setDescription('Division ID (Bxxx)').setAutocomplete(true),
                 )),
     // async autocomplete(interaction) {
