@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
         },
     }, {
-        timestamps: false,
+        paranoid: true,
+        timestamps: true,
     });
 };

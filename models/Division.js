@@ -48,5 +48,8 @@ module.exports = (sequelize, DataTypes) => {
                 throw new Error('Do not try to set the `lineText` value!');
             },
         },
+    }, {
+        timestamps: true,
+        paranoid: true,
     });
 };
