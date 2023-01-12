@@ -71,3 +71,5 @@ client.on('unhandledRejection', error => {
 
 // Start the bot
 client.login(token);
+
+module.exports.discordClient = client;
