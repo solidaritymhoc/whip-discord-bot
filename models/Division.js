@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
                     this.setDataValue('end_date', value.toDate());
                 }
                 else {
-                    this.setDataValue('end_time', value);
+                    this.setDataValue('end_date', value);
                 }
             },
         },
