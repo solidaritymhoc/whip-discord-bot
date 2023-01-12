@@ -1,22 +1,29 @@
-const { SlashCommandBuilder, EmbedBuilder, hyperlink } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { Division } = require('../dbObjects');
 const { findDivisionByUrl } = require('../functions/reddit');
 const moment = require('moment-timezone');
 const momentFormat = 'dddd, MMMM Do YYYY, h:mm:ss a';
+
+/**
+ * Commands for managing individual divisions.
+ */
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('divisions')
         .setDescription('Manage divisions')
         .addSubcommand(subcommand =>
+            // View all current divisions
             subcommand
                 .setName('current')
                 .setDescription('View current divisions'))
         .addSubcommand(subcommand =>
+            // Add a new division
             subcommand
                 .setName('add')
                 .setDescription('Add division')
                 .addStringOption(option =>
+                    // https://reddit.com/r/mhocmp/xxxx/xxx...
                     option.setName('reddit_url').setRequired(true).setDescription('Full Reddit URL of the division'),
                 )
                 .addStringOption(option =>
@@ -35,14 +42,16 @@ module.exports = {
                     ),
                 )
                 .addIntegerOption(option =>
-                    option.setName('days_ends_in').setDescription('Defaults to 3. Bot will assume ending 10pm UK time.')
+                    option.setName('days_ends_in').setDescription('Defaults to 3. Bot will assume ending 10pm UK time.'),
                 ))
         .addSubcommand(subcommand =>
+            // Remove a division
             subcommand
                 .setName('remove')
                 .setDescription('Remove division')
                 .addStringOption(option =>
-                    option.setName('division_id').setRequired(true).setDescription('Division ID (Bxxx)').setAutocomplete(true)
+                    // B1xxx
+                    option.setName('division_id').setRequired(true).setDescription('Division ID (Bxxx)').setAutocomplete(true),
                 )),
     // async autocomplete(interaction) {
     //     console.log('Autocompleting');
@@ -118,6 +127,15 @@ module.exports = {
                 break;
             }
             case 'remove': {
+                await interaction.deferReply();
+                const divisionId = interaction.options.getString('division_id');
+                if ((!divisionId) || (await Division.findByPk(divisionId) === null)) {
+                    await interaction.editReply({ content: 'Please provide a valid current division ID. Use `/divisions current` to view current divisions.', ephemeral: true });
+                    return;
+                }
+                const division = await Division.findByPk(divisionId);
+                await division.destroy();
+                await interaction.editReply(`${divisionId} removed.`);
                 break;
             }
             default: {
