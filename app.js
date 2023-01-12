@@ -54,7 +54,7 @@ client.on(Events.InteractionCreate, async interaction => {
 // Login event
 client.once(Events.ClientReady, async () => {
 	console.log(`Ready! Logged in as ${client.user.tag}`);
-	client.user.setPresence({ activities: [{ name: 'Pepsiman™️', type: ActivityType.Listening, url: 'https://www.youtube.com/watch?v=z54MpfR3XE4' }], status: 'dnd' });
+	client.user.setPresence({ activities: [{ name: 'Twinkle the Bunny', type: ActivityType.Watching }], status: 'online' });
 });
 
 // Cron job
