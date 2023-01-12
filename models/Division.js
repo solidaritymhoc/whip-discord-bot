@@ -1,4 +1,13 @@
 const moment = require('moment-timezone');
+/**
+* @typedef {import('sequelize').Sequelize} Sequelize
+* @typedef {import('sequelize/types')} DataTypes
+*/
+/**
+* @param {DataTypes} DataTypes
+* @param {Sequelize} Sequelize
+* @returns
+*/
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('divisions', {
         id: {
