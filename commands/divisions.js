@@ -62,20 +62,31 @@ module.exports = {
         switch (interaction.options.getSubcommand()) {
             case 'current': {
                 await interaction.deferReply();
+
                 const currentDivisions = await Division.findAll();
                 if (currentDivisions.length === null) {
                     await interaction.editReply('No current divisions');
                     return;
                 }
+
                 const responseEmbed = new EmbedBuilder()
                     .setTitle('Current divisions')
                     .setDescription('Manage these with the `add` and `remove` subcommands.');
+
                 currentDivisions.forEach(division => {
+                    let remindersSentString = 'No reminders sent.';
+                    if (division.first_reminder_sent && division.second_reminder_sent) {
+                        remindersSentString = '2 reminders sent.';
+                    }
+                    else if (division.first_reminder_sent) {
+                        remindersSentString = '1 reminder sent.';
+                    }
                     responseEmbed.addFields({
                         name: `${division.id} - ${division.url} - **${division.lineText} line ${division.whip.toString().toUpperCase()}**`,
-                        value: `Ends ${division.end_date.format(momentFormat)}`,
+                        value: `Ends ${division.end_date.format(momentFormat)}. ${remindersSentString}`,
                     });
                 });
+
                 await interaction.editReply({ embeds: [responseEmbed] });
                 break;
             }
@@ -84,10 +95,12 @@ module.exports = {
                 const redditUrl = interaction.options.getString('reddit_url');
                 const whip = interaction.options.getString('whip');
                 const line = interaction.options.getInteger('line');
+
                 let daysEndsIn = interaction.options.getInteger('days_ends_in');
                 if (daysEndsIn < 1) {
                     daysEndsIn = null;
                 }
+
                 if (!redditUrl || !whip || !line) {
                     await interaction.editReply({ content: 'Please provide a reddit URL and whip setting.', ephemeral: true });
                     return;

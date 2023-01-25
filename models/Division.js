@@ -5,8 +5,15 @@ const moment = require('moment-timezone');
 */
 /**
 * @param {DataTypes} DataTypes
-* @param {Sequelize} Sequelize
-* @returns
+* @param {Sequelize} sequelize
+* @param {string} id
+* @param {string} whip 
+* @param {number} line 
+* @param {string} url
+* @param {moment} end_date 
+* @param {boolean} first_reminder_sent
+* @param {boolean} second_reminder_sent
+* @param {DataTypes.VIRTUAL} lineText
 */
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('divisions', {
@@ -38,6 +45,14 @@ module.exports = (sequelize, DataTypes) => {
                     this.setDataValue('end_time', value);
                 }
             },
+        },
+        first_reminder_sent: {
+            type: DataTypes.BOOLEAN,
+            nullable: true,
+        },
+        second_reminder_sent: {
+            type: DataTypes.BOOLEAN,
+            nullable: true,
         },
         lineText: {
             type: DataTypes.VIRTUAL,
