@@ -7,7 +7,23 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: 'database.sqlite',
 });
 
+/**
+* @typedef {import('sequelize').Sequelize} Sequelize
+* @typedef {import('sequelize/types')} DataTypes
+*/
+
+/**
+* @param {DataTypes} DataTypes
+* @param {Sequelize} Sequelize
+* @returns
+*/
 const Mps = require('./models/Mps.js')(sequelize, Sequelize.DataTypes);
+
+/**
+* @param {DataTypes} DataTypes
+* @param {Sequelize} Sequelize
+* @returns
+*/
 const Division = require('./models/Division')(sequelize, Sequelize.DataTypes);
 //
 // Reflect.defineProperty(Mps.prototype, 'getItems', {

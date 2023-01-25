@@ -4,8 +4,10 @@ const path = require('node:path');
 
 // Import discord.js
 const { Client, Events, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
-const { token } = require('./config.json');
+const { token, enableReadyLog } = require('./config.json');
 const moment = require('moment-timezone');
+const { removeExpiredDivisions, issueReminderNotices } = require('./functions/tasks');
+const { logStringToDevChannel, logLevels } = require('./functions/logging');
 
 // Set moment default time zone
 moment.tz.setDefault('Europe/London');
@@ -52,8 +54,23 @@ client.on(Events.InteractionCreate, async interaction => {
 // Login event
 client.once(Events.ClientReady, async () => {
 	console.log(`Ready! Logged in as ${client.user.tag}`);
-	client.user.setPresence({ activities: [{ name: 'Pepsiman™️', type: ActivityType.Listening, url: 'https://www.youtube.com/watch?v=z54MpfR3XE4' }], status: 'dnd' });
+	if (enableReadyLog) await logStringToDevChannel('Ready!', logLevels.Info);
+	await client.user.setPresence({ activities: [{ name: 'Twinkle the Bunny', type: ActivityType.Watching }], status: 'online' });
 });
+
+// Cron job
+const removeExpiredDivisionsTask = cron.schedule('* * * * * *', async () => await removeExpiredDivisions(), {
+	scheduled: true,
+	timezone: 'Europe/London',
+});
+
+const issueReminderNoticesTask = cron.schedule('* * * * * *', async () => await issueReminderNotices(), {
+	scheduled: true,
+	timezone: 'Europe/London',
+});
+
+removeExpiredDivisionsTask.start();
+issueReminderNoticesTask.start();
 
 client.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);
@@ -61,3 +78,5 @@ client.on('unhandledRejection', error => {
 
 // Start the bot
 client.login(token);
+
+module.exports.discordClient = client;

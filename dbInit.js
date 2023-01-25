@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const moment = require('moment-timezone');
 
 const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
@@ -7,7 +8,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: 'database.sqlite',
 });
 
-const Mps = require('./models/Mps.js')(sequelize, Sequelize.DataTypes);
+const Mps = require('./models/Mps')(sequelize, Sequelize.DataTypes);
 const Divisions = require('./models/Division')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
@@ -22,7 +23,7 @@ sequelize.sync({ force }).then(async () => {
         Divisions.upsert({
             id: 'B000',
             url: 'https://reddit.com/r/mhocmp',
-            end_date: new Date(),
+            end_date: moment().tz('Europe/London').add(3, 'days').hour(22).minutes(0).seconds(0),
             whip: 'aye',
             line: 1,
         }),
