@@ -7,30 +7,46 @@ const moment = require('moment-timezone');
 * @param {DataTypes} DataTypes
 * @param {Sequelize} sequelize
 * @param {string} id
-* @param {string} whip 
-* @param {number} line 
+* @param {string} whip
+* @param {number} line
 * @param {string} url
-* @param {moment} end_date 
+* @param {moment} end_date
 * @param {boolean} first_reminder_sent
 * @param {boolean} second_reminder_sent
 * @param {DataTypes.VIRTUAL} lineText
 */
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('divisions', {
+        /**
+         * @type string
+         */
         id: {
             type: DataTypes.STRING,
             primaryKey: true,
             unique: true,
         },
+        /**
+         * @type string
+         */
         whip: {
             type: DataTypes.STRING,
         },
+        /**
+         * @type number
+         */
         line: {
             type: DataTypes.INTEGER,
         },
+        /**
+         * @type string
+         */
         url: {
             type: DataTypes.TEXT,
         },
+        /**
+         * The end date of the division. Defaults to 10PM GMT 3 days after creation.
+         * @type moment
+         */
         end_date: {
             type: DataTypes.DATE,
             get() {
@@ -46,14 +62,23 @@ module.exports = (sequelize, DataTypes) => {
                 }
             },
         },
+        /**
+         * @type boolean
+         */
         first_reminder_sent: {
             type: DataTypes.BOOLEAN,
-            nullable: true,
+            defaultValue: 0,
         },
+        /**
+         * @type boolean
+         */
         second_reminder_sent: {
             type: DataTypes.BOOLEAN,
-            nullable: true,
+            defaultValue: 0,
         },
+        /**
+         * @type string
+         */
         lineText: {
             type: DataTypes.VIRTUAL,
             get() {

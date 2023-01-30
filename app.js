@@ -1,6 +1,7 @@
 // Import file path libraries
 const fs = require('node:fs');
 const path = require('node:path');
+const cron = require('node-cron');
 
 // Import discord.js
 const { Client, Events, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
@@ -64,7 +65,7 @@ const removeExpiredDivisionsTask = cron.schedule('* * * * * *', async () => awai
 	timezone: 'Europe/London',
 });
 
-const issueReminderNoticesTask = cron.schedule('* * * * * *', async () => await issueReminderNotices(), {
+const issueReminderNoticesTask = cron.schedule('*/1 * * * *', async () => await issueReminderNotices(), {
 	scheduled: true,
 	timezone: 'Europe/London',
 });

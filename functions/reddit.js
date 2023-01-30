@@ -2,6 +2,7 @@ const { redditClientId, redditSecret, redditBotName, redditBotVer, redditBotUser
 const snoowrap = require('snoowrap');
 const { Mps } = require('../dbObjects');
 const { parseVote, Division } = require('../functions/utils');
+const { getRedditId } = require('./utils');
 
 const r = new snoowrap({
     userAgent: `${redditBotName} version ${redditBotVer} by u/${redditBotUsername}`,
@@ -18,11 +19,7 @@ const r = new snoowrap({
  * @returns {Promise<Division|null>}
  */
 async function findDivisionByUrl(url) {
-    const urlSegments = new URL(url).pathname.split('/');
-    if (urlSegments[urlSegments.length - 1] === '') {
-        urlSegments.pop();
-    }
-    const submissionId = urlSegments[urlSegments.length - 2];
+    const submissionId = getRedditId(url);
     if (submissionId === null) return null;
     let division = null;
     try {

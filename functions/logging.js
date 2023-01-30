@@ -1,4 +1,4 @@
-const { discordDevLogChannelId, devLogEnabled } = require('../config.json');
+const { discordDevLogChannelId, enableDevLog } = require('../config.json');
 const app = require('../app.js');
 const moment = require('moment-timezone');
 
@@ -14,8 +14,8 @@ const logLevels = {
  *
  * @returns boolean
  */
-function isDevLogEnabled() {
-    return devLogEnabled;
+function devLogEnabled() {
+    return enableDevLog;
 }
 
 /**
@@ -31,5 +31,5 @@ async function logStringToDevChannel(message, level) {
 module.exports = {
     logStringToDevChannel,
     logLevels,
-    isDevLogEnabled,
+    devLogEnabled,
 };

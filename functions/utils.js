@@ -13,6 +13,16 @@ const parseVote = (vote) => {
     return 'N/A';
 };
 
+const getRedditId = (url) => {
+    const urlSegments = new URL(url).pathname.split('/');
+    if (urlSegments[urlSegments.length - 1] === '') {
+        urlSegments.pop();
+    }
+    const submissionId = urlSegments[urlSegments.length - 2];
+    if (submissionId === null) return null;
+    return submissionId;
+};
+
 class Division {
     constructor(id, url, comments) {
         this.id = id;
@@ -48,4 +58,5 @@ class Division {
 module.exports = {
     parseVote,
     Division,
+    getRedditId,
 };
