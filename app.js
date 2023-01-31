@@ -1,12 +1,20 @@
-// Import file path libraries
+// Import libraries
 const fs = require('node:fs');
 const path = require('node:path');
 const cron = require('node-cron');
+const config = require('config');
+
+// Import configuration
+const token = config.get('bot.token');
+const enableReadyLog = config.get('logging.enableReadyLog');
 
 // Import discord.js
 const { Client, Events, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
-const { token, enableReadyLog } = require('./config.json');
+
+// Import moment
 const moment = require('moment-timezone');
+
+// Import functions
 const { removeExpiredDivisions, issueReminderNotices } = require('./functions/tasks');
 const { logStringToDevChannel, logLevels } = require('./functions/logging');
 

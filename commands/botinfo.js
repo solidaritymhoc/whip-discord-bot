@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { Octokit } = require('octokit');
-const { gitRepoName, gitRepoOwner, gitToken } = require('../config.json');
+const config = require('config');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -8,11 +8,11 @@ module.exports = {
         .setDescription('See bot information and current version.'),
     async execute(interaction) {
         const octokit = new Octokit({
-            auth: gitToken,
+            auth: config.get('git.apiToken'),
         });
         const branchInfo = await octokit.request('GET /repos/{owner}/{repo}/branches/{branch}', {
-            owner: gitRepoOwner,
-            repo: gitRepoName,
+            owner: config.get('git.owner'),
+            repo: config.get('git.name'),
             branch: 'main',
         });
         await interaction.reply(`Latest bot version ${branchInfo.data.commit.sha} (<${branchInfo.data.commit.html_url}>)`);

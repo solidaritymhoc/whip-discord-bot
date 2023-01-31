@@ -9,6 +9,7 @@
   "author": "cocoiadrop_, ohprkl",
   "license": "MIT",
   "dependencies": {
+    "config": "^3.3.9",
     "discord.js": "^14.7.1",
     "markdown-escape": "^2.0.0",
     "moment": "^2.29.4",

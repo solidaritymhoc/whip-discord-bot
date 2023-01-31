@@ -1,15 +1,17 @@
-const { redditClientId, redditSecret, redditBotName, redditBotVer, redditBotUsername, redditBotPassword } = require('../config.json');
+// Import libraries and functions
 const snoowrap = require('snoowrap');
+const config = require('config');
 const { Mps } = require('../dbObjects');
 const { parseVote, Division } = require('../functions/utils');
 const { getRedditId } = require('./utils');
 
+// Configuration
 const r = new snoowrap({
-    userAgent: `${redditBotName} version ${redditBotVer} by u/${redditBotUsername}`,
-    clientId: redditClientId,
-    clientSecret: redditSecret,
-    username: redditBotUsername,
-    password: redditBotPassword,
+    userAgent: `${config.get('reddit.botName')} version ${config.get('reddit.botVersion')} by u/${config.get('reddit.botUsername')}`,
+    clientId: config.get('reddit.clientId'),
+    clientSecret: config.get('reddit.secret'),
+    username: config.get('reddit.botUsername'),
+    password: config.get('reddit.botPassword'),
 });
 
 /**
@@ -58,8 +60,6 @@ async function getDivisionVotes(redditId) {
 
     return division;
 }
-
-findDivisionByUrl('https://www.reddit.com/r/MHOCMP/comments/zp9y9j/b1458_equality_act_amendment_bill_division/');
 
 module.exports = {
     getDivisionVotes,

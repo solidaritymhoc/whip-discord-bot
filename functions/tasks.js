@@ -1,14 +1,22 @@
-const { Division } = require('../dbObjects');
+// Import libraries
 const moment = require('moment-timezone');
 const { Op } = require('sequelize');
+const escape = require('markdown-escape');
+const { EmbedBuilder } = require('discord.js');
+const config = require('config');
+
+// Import objects
+const { Division } = require('../dbObjects');
+const app = require('../app');
+
+// Import functions
 const { logStringToDevChannel, logLevels, devLogEnabled } = require('./logging');
 const { getMpsDnv } = require('./whip');
 const { getDivisionVotes, findDivisionByUrl } = require('./reddit');
 const { getRedditId } = require('./utils');
-const escape = require('markdown-escape');
-const { EmbedBuilder } = require('discord.js');
-const app = require('../app');
-const { discordWhipChannelId } = require('../config.json');
+
+// Configuration
+const discordWhipChannelId = config.get('guild.whipChannelId');
 const momentFormat = 'dddd, MMMM Do YYYY, h:mm:ss a';
 
 /**

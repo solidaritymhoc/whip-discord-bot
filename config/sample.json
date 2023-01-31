@@ -1,0 +1,28 @@
+{
+    "bot": {
+        "token": "DISCORD_BOT_TOKEN",
+        "clientId": "DISCORD_CLIENT_ID"
+    },
+    "git": {
+        "owner": "redditmhoc",
+        "name": "whip-discord-bot",
+        "apiToken": "OCTOBOT_TOKEN"
+    },
+    "reddit": {
+        "clientId": "REDDIT_CLIENT_ID",
+        "secret": "REDDIT_SECRET",
+        "botName": "MHoCWhip",
+        "botVersion": "2.0.0",
+        "botUsername": "solidaritywhipbot",
+        "botPassword": "PASSWORD"
+    },
+    "guild": {
+        "id": "GUILD_ID",
+        "logChannelId": "LOG_CHANNEL_ID",
+        "whipChannelId": "WHIP_CHANNEL_ID"
+    },
+    "logging": {
+        "enableDevLog": true,
+        "enableReadyLog": true
+    }
+}

@@ -1,6 +1,9 @@
-const { discordDevLogChannelId, enableDevLog } = require('../config.json');
 const app = require('../app.js');
 const moment = require('moment-timezone');
+const config = require('config');
+
+const discordDevLogChannelId = config.get('guild.logChannelId');
+const enableDevLog = config.get('logging.enableDevLog');
 
 const logLevels = {
     Critical: 'CRITICAL',

@@ -5,3 +5,4 @@ config.json
 .vscode/
 /database.sqlite
 mps.json
+config/default.json
