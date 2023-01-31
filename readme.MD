@@ -10,7 +10,7 @@ Go to **[Node.js](https://nodejs.org/en/)** to install the Node.js runtime for y
 
 After installation, you should see something similar to the following after typing `npm` into your Terminal/Command Prompt.
 
-```
+```zsh
 ➜  Development npm -i
 npm <command>
 
@@ -23,7 +23,7 @@ npm install        install all the dependencies in your project
 
 Run `npm install` in your Terminal within the project directory. If successful, it should show:
 
-```
+```zsh
 /opt/homebrew/bin/npm install
 
 up to date, audited 329 packages in 3s
@@ -72,7 +72,7 @@ Then in the project directory within your Terminal, run the command `node dbImpo
 
 If successful, it should show:
 
-```
+```zsh
 ➜  solidarity-whip-bot git:(main) ✗ node dbImport.js --force
 Found 3 MPs
 Imported username1
@@ -85,7 +85,7 @@ Database synced!
 
 You can now run the bot with the command `node app.js`. 
 
-```
+```zsh
 ➜  solidarity-whip-bot git:(main) ✗ node app.js
 Ready! Logged in as BOT USERNAME#0000
 ```
