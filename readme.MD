@@ -54,6 +54,17 @@ For a new deployment:
 3. Enter the ID for the Discord server (guild) this bot is based in, the logging channel ID, and the whip messages channel ID, into the `guild` section. To get these IDs enable developer mode in your Discord client and right click on the server and channels.
 4. *(Optional) Get an Octokit [API key](https://github.com/octokit/octokit.js/#authentication) to display version information.*
 
+#### Inititalise database
+
+Run the command `node dbInit.js --force`.
+
+If successful, it should show:
+
+```ps
+PS C:\Users\User\whip-discord-bot> node dbInit.js --force
+Database synced
+```
+
 #### Import MP list.
 
 Create a .json file to list all of your MPs, so it is easy to import them into the bot when first starting. Place it into the project directory.
