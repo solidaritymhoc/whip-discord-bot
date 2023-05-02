@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             primaryKey: true,
         },
+        discord_id: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     }, {
         paranoid: true,
         timestamps: true,

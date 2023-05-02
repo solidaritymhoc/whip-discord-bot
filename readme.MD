@@ -69,13 +69,20 @@ Database synced
 
 Create a .json file to list all of your MPs, so it is easy to import them into the bot when first starting. Place it into the project directory.
 
+`discord_id` is used to identify members via Discord to send whip reminders via DMs. You can define their Discord account in the file by adding their snowflake ID (long number) to the entry, or leave it blank with "".
+
 The contents need to be as so:
 
 ```json
-{ "usernames": [
-  "username1",
-  "username3",
-  "username3"
+{ "users": [
+  {
+    "reddit": "username",
+    "discord_id": "snowflake"
+  },
+  {
+    "reddit": "username",
+    "discord_id": ""
+  }
 ]}
 ```
 

@@ -16,7 +16,7 @@ const force = process.argv.includes('--force') || process.argv.includes('-f');
 sequelize.sync({ force }).then(async () => {
 
     const mps = [
-        Mps.upsert({ name: 'SampleMp' }),
+        Mps.upsert({ name: 'SampleMp', discord_id: null }),
     ];
 
     const divisions = [

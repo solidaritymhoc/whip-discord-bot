@@ -1,8 +1,10 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, Colors } = require('discord.js');
 const { Division } = require('../dbObjects');
 const { findDivisionByUrl } = require('../functions/reddit');
 const moment = require('moment-timezone');
 const momentFormat = 'dddd, MMMM Do YYYY, h:mm:ss a';
+const config = require('config');
+const app = require('../app.js');
 
 /**
  * Commands for managing individual divisions.
@@ -52,7 +54,28 @@ module.exports = {
                 .addStringOption(option =>
                     // B1xxx
                     option.setName('division_id').setRequired(true).setDescription('Division ID (Bxxx)').setAutocomplete(true),
-                )),
+                ))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('notify')
+                .setDescription('Notify MPs of up to 4 divisions.')
+                .addStringOption(option =>
+                    // B1xxx
+                    option.setName('division_1').setRequired(true).setDescription('First division ID').setAutocomplete(true),
+                )
+                .addStringOption(option =>
+                    // B1xxx
+                    option.setName('division_2').setRequired(false).setDescription('Second division ID').setAutocomplete(true),
+                )
+                .addStringOption(option =>
+                    // B1xxx
+                    option.setName('division_3').setRequired(false).setDescription('Third division ID').setAutocomplete(true),
+                )
+                .addStringOption(option =>
+                    // B1xxx
+                    option.setName('division_4').setRequired(false).setDescription('Fourth division ID').setAutocomplete(true),
+                ),
+        ),
     // async autocomplete(interaction) {
     //     console.log('Autocompleting');
     //     const choices = [];
@@ -151,8 +174,62 @@ module.exports = {
                 await interaction.editReply(`${divisionId} removed.`);
                 break;
             }
+            case 'notify': {
+                await interaction.deferReply();
+
+                let divisionIds = [
+                    interaction.options.getString('division_1').toUpperCase(),
+                ];
+                for (let i = 2; i <= 4; i++) {
+                    const id = interaction.options.getString(`division_${i}`);
+                    if (id) {
+                        divisionIds.push(id.toUpperCase());
+                    }
+                }
+
+                const embeds = [];
+
+                for (const id of divisionIds) {
+                    const division = await Division.findByPk(id);
+                    if (!(division instanceof Division)) {
+                        continue;
+                    }
+
+                    let colour = null;
+                    switch (division.whip) {
+                        case 'aye': {
+                            colour = Colors.Green;
+                            break;
+                        }
+                        case 'no': {
+                            colour = Colors.Red;
+                            break;
+                        }
+                        case 'abs': {
+                            colour = Colors.Yellow;
+                            break;
+                        }
+                    }
+
+                    const embed = new EmbedBuilder()
+                        .setTitle(`${division.id} - **${division.lineText} line ${division.whip.toString().toUpperCase()}**`)
+                        .setDescription(`Division ends ${division.end_date.format(momentFormat)}`)
+                        .setURL(division.url)
+                        .setColor(colour);
+
+                    embeds.push(embed);
+                }
+
+                const whipChannel = app.discordClient.channels.cache.get(config.get('guild.whipChannelId'));
+
+                whipChannel.send({ content: `<@&${config.get('guild.mpsRoleId')}>`, embeds: embeds });
+
+                await interaction.editReply(`Sent notifications to ${whipChannel.toString()}.`);
+
+                break;
+            }
             default: {
-                interaction.reply('Subcommand required.');
+                await interaction.reply('Subcommand required.');
                 return;
             }
         }

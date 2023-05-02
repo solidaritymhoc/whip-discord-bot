@@ -19,7 +19,8 @@
     "guild": {
         "id": "GUILD_ID",
         "logChannelId": "LOG_CHANNEL_ID",
-        "whipChannelId": "WHIP_CHANNEL_ID"
+        "whipChannelId": "WHIP_CHANNEL_ID",
+        "mpsRoleId": "MPS_ROLE_ID"
     },
     "logging": {
         "enableDevLog": true,
