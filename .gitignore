@@ -6,3 +6,5 @@ config.json
 /database.sqlite
 mps.json
 config/default.json
+config/prod.json
+.DS_Store
