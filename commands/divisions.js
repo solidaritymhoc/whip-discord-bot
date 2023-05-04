@@ -76,20 +76,24 @@ module.exports = {
                     option.setName('division_4').setRequired(false).setDescription('Fourth division ID').setAutocomplete(true),
                 ),
         ),
-    // async autocomplete(interaction) {
-    //     console.log('Autocompleting');
-    //     const choices = [];
-    //     const currentDivisions = await Division.findAll();
-    //     if (currentDivisions !== null) {
-    //         currentDivisions.forEach(division => {
-    //             choices.push(division.id);
-    //         });
-    //     }
-    //     console.log(currentDivisions);
-    //     await interaction.respond(
-    //         choices.map(choice => ({ name: choice, value: choice })),
-    //     );
-    // },
+    async autocomplete(interaction) {
+        const focusedOption = interaction.options.getFocused(true);
+
+        const choices = [];
+
+        if (focusedOption.name.startsWith('division_')) {
+            const currentDivisions = await Division.findAll();
+            if (currentDivisions !== null) {
+                currentDivisions.forEach(division => {
+                    choices.push(division.id);
+                });
+            }
+        }
+
+        await interaction.respond(
+            choices.map(choice => ({ name: choice, value: choice })),
+        );
+    },
     async execute(interaction) {
         switch (interaction.options.getSubcommand()) {
             case 'current': {

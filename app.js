@@ -42,21 +42,36 @@ for (const file of commandFiles) {
 
 // Process interactions (slash commands)
 client.on(Events.InteractionCreate, async interaction => {
-	if (!interaction.isChatInputCommand()) return;
+	if (interaction.isChatInputCommand()) {
+		const command = interaction.client.commands.get(interaction.commandName);
 
-	const command = interaction.client.commands.get(interaction.commandName);
+		if (!command) {
+			console.error(`No command matching ${interaction.commandName} was found.`);
+			return;
+		}
 
-	if (!command) {
-		console.error(`No command matching ${interaction.commandName} was found.`);
-		return;
+		try {
+			await command.execute(interaction);
+		}
+		catch (error) {
+			console.error(error);
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
 	}
+	else if (interaction.isAutocomplete()) {
+		const command = interaction.client.commands.get(interaction.commandName);
 
-	try {
-		await command.execute(interaction);
-	}
-    catch (error) {
-		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		if (!command) {
+			console.error(`No command matching ${interaction.commandName} was found.`);
+			return;
+		}
+
+		try {
+			await command.autocomplete(interaction);
+		}
+		catch (error) {
+			console.error(error);
+		}
 	}
 });
 
@@ -73,13 +88,13 @@ const removeExpiredDivisionsTask = cron.schedule('* * * * * *', async () => awai
 	timezone: 'Europe/London',
 });
 
-const issueReminderNoticesTask = cron.schedule('*/1 * * * *', async () => await issueReminderNotices(), {
-	scheduled: true,
-	timezone: 'Europe/London',
-});
+// const issueReminderNoticesTask = cron.schedule('*/1 * * * *', async () => await issueReminderNotices(), {
+// 	scheduled: true,
+// 	timezone: 'Europe/London',
+// });
 
 removeExpiredDivisionsTask.start();
-issueReminderNoticesTask.start();
+// issueReminderNoticesTask.start();
 
 client.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);
