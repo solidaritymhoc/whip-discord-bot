@@ -83,8 +83,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.VIRTUAL,
             get() {
                 switch (this.line) {
-                    case 0:
-                        return 'No';
+                    case 4:
+                        return 'N/A';
                     case 1:
                         return 'One';
                     case 2:

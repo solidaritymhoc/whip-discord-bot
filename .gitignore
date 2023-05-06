@@ -8,3 +8,4 @@ mps.json
 config/default.json
 config/prod.json
 .DS_Store
+config/dev.json

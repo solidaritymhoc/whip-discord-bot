@@ -33,11 +33,12 @@ module.exports = {
                         { name: 'Aye', value: 'aye' },
                         { name: 'No', value: 'no' },
                         { name: 'Abstain', value: 'abs' },
+                        { name: 'Free', value: 'free' },
                     ),
                 )
                 .addIntegerOption(option =>
                     option.setName('line').setRequired(true).setDescription('None, 1, 2, 3').setChoices(
-                        { name: 'None', value: 0 },
+                        { name: 'None', value: 4 },
                         { name: '1 Line', value: 1 },
                         { name: '2 Line', value: 2 },
                         { name: '3 Line', value: 3 },
@@ -211,6 +212,10 @@ module.exports = {
                         }
                         case 'abs': {
                             colour = Colors.Yellow;
+                            break;
+                        }
+                        case 'free': {
+                            colour = Colors.Greyple;
                             break;
                         }
                     }

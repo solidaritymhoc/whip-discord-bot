@@ -134,41 +134,41 @@ module.exports = {
                 return;
             }
         }
-        await interaction.deferReply();
-        const redditId = interaction.options.get('reddit_id').value;
-        const whip = interaction.options.get('whip').value;
-
-        const division = await getDivisionVotes(redditId);
-        if (!(division instanceof Division)) {
-            await interaction.editReply('Operation failed. Check the vote ID is correct.');
-            return;
-        }
-
-        const mpsAgainstWhip = getMpsAgainstWhip(division, whip);
-        const mpsComplyWhip = getMpsComplyWhip(division, whip);
-        const mpsDnv = await getMpsDnv(division);
-
-        let fieldComplyValue = '';
-        mpsComplyWhip.forEach(mp => fieldComplyValue += `${escape(mp[0])} \n`);
-        if (fieldComplyValue === '') fieldComplyValue = 'None';
-
-        let fieldAgainstValue = '';
-        mpsAgainstWhip.forEach(mp => fieldAgainstValue += `${escape(mp[0])} (${mp[1]}) \n`);
-        if (fieldAgainstValue === '') fieldAgainstValue = 'None';
-
-        let fieldDnvValue = '';
-        mpsDnv.forEach(mp => fieldDnvValue += `${escape(mp)} \n`);
-        if (fieldDnvValue === '') fieldDnvValue = 'None';
-
-        const responseEmbed = new EmbedBuilder()
-            .setTitle(`Status of division ${division.id} (${division.url})`)
-            .setDescription(`Requested whip is **${whip.toUpperCase()}**. ${division.comments.length.toString()} votes so far.`)
-            .addFields(
-                { name: 'Complying:', value: fieldComplyValue },
-                { name: 'Against:', value: fieldAgainstValue },
-                { name: 'DNV', value: fieldDnvValue },
-            );
-
-        await interaction.editReply({ embeds: [responseEmbed] });
+        // await interaction.deferReply();
+        // const redditId = interaction.options.get('reddit_id').value;
+        // const whip = interaction.options.get('whip').value;
+        //
+        // const division = await getDivisionVotes(redditId);
+        // if (!(division instanceof Division)) {
+        //     await interaction.editReply('Operation failed. Check the vote ID is correct.');
+        //     return;
+        // }
+        //
+        // const mpsAgainstWhip = getMpsAgainstWhip(division, whip);
+        // const mpsComplyWhip = getMpsComplyWhip(division, whip);
+        // const mpsDnv = await getMpsDnv(division);
+        //
+        // let fieldComplyValue = '';
+        // mpsComplyWhip.forEach(mp => fieldComplyValue += `${escape(mp[0])} \n`);
+        // if (fieldComplyValue === '') fieldComplyValue = 'None';
+        //
+        // let fieldAgainstValue = '';
+        // mpsAgainstWhip.forEach(mp => fieldAgainstValue += `${escape(mp[0])} (${mp[1]}) \n`);
+        // if (fieldAgainstValue === '') fieldAgainstValue = 'None';
+        //
+        // let fieldDnvValue = '';
+        // mpsDnv.forEach(mp => fieldDnvValue += `${escape(mp)} \n`);
+        // if (fieldDnvValue === '') fieldDnvValue = 'None';
+        //
+        // const responseEmbed = new EmbedBuilder()
+        //     .setTitle(`Status of division ${division.id} (${division.url})`)
+        //     .setDescription(`Requested whip is **${whip.toUpperCase()}**. ${division.comments.length.toString()} votes so far.`)
+        //     .addFields(
+        //         { name: 'Complying:', value: fieldComplyValue },
+        //         { name: 'Against:', value: fieldAgainstValue },
+        //         { name: 'DNV', value: fieldDnvValue },
+        //     );
+        //
+        // await interaction.editReply({ embeds: [responseEmbed] });
     },
 };
