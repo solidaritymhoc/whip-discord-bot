@@ -4,9 +4,10 @@
   "description": "r/MHoC Solidarity Party Discord Whip Bot",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "cocoiadrop_, ohprkl",
+  "author": "cocoiadrop_",
   "license": "MIT",
   "dependencies": {
     "config": "^3.3.9",

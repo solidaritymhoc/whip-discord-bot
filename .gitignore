@@ -5,7 +5,5 @@ config.json
 .vscode/
 /database.sqlite
 mps.json
-config/default.json
-config/prod.json
+config/
 .DS_Store
-config/dev.json

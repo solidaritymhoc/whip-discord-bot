@@ -25,7 +25,22 @@ module.exports = {
             subcommand
                 .setName(Commands.Remove)
                 .setDescription('remove an MP')
-                .addStringOption(option => option.setName('username').setDescription('Reddit username with no prefix').setRequired(true))),
+                .addStringOption(option => option.setName('username').setDescription('Reddit username with no prefix').setRequired(true).setAutocomplete(true))),
+    async autocomplete(interaction) {
+      const focusedOption = interaction.options.getFocused(true);
+      const choices = [];
+      if (focusedOption.name === 'username') {
+          const mps = await Mps.findAll();
+          if (mps !== null) {
+              mps.forEach(member => {
+                  choices.push(member.name);
+              });
+          }
+      }
+      await interaction.respond(
+          choices.map(choice => ({ name: choice, value: choice })),
+      );
+    },
     async execute(interaction) {
         switch (interaction.options.getSubcommand()) {
             case Commands.All: {
@@ -51,8 +66,14 @@ module.exports = {
                 else if (paranoid instanceof Mps) {
                     if (paranoid.isSoftDeleted()) {
                         await paranoid.restore();
+                        if (!paranoid.discord_id && discord_user_id) {
+                            paranoid.set({
+                                discord_id: discord_user_id,
+                            });
+                            await paranoid.save();
+                        }
                         await interaction.editReply({ content: `MP ${username} restored.`, ephemeral: true });
-                        return;
+                        return;7
                     }
                     await interaction.editReply({ content: `MP ${username} already on list.`, ephemeral: true });
                     return;
