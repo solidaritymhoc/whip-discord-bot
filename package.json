@@ -18,10 +18,11 @@
     "node-cron": "^3.0.2",
     "octokit": "^2.0.10",
     "sequelize": "^6.28.0",
-    "snoowrap": "^1.23.0",
+    "snoowrap": "^1.15.2",
     "sqlite3": "^5.1.4"
   },
   "devDependencies": {
-    "eslint": "^8.30.0"
+    "eslint": "^8.30.0",
+    "sequelize-cli": "^6.6.0"
   }
 }
