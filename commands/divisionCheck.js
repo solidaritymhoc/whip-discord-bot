@@ -11,6 +11,7 @@ const Commands = {
 };
 
 module.exports = {
+    cooldown: 5,
     data: new SlashCommandBuilder()
         .setName('check')
         .setDescription('Check the voting record of an open division.')
