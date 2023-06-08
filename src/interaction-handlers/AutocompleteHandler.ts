@@ -25,7 +25,12 @@ export class AutocompleteHandler extends InteractionHandler {
                 
                 return this.some(members.map((match) => ({ name: match.redditUsername, value: match.redditUsername })));
             }
-            case 'division_id': {
+            case 'division_id': 
+            case 'division_1':
+            case 'division_2':
+            case 'division_3':
+            case 'division_4':
+            {
                 const divisionRespository = AppDataSource.getRepository(Division);
                 const divisions = await divisionRespository.find();
 

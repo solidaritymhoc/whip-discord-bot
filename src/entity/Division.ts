@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Index } from "typeorm";
 import { ValidVotes } from "../enums/ValidVotes";
 import { WhipLines } from "../enums/WhipLines";
+import { Colors, EmbedBuilder } from "discord.js";
+import { formatDate, voteColour } from "../utilities/Formatters";
 
 @Entity()
 export class Division {
@@ -57,5 +59,14 @@ export class Division {
     public get directive(): string {
         if (this.freeVote) return "Free Vote";
         else return `${this.whipLine} line ${this.whipVote.toUpperCase()}`
+    }
+
+    public get whipEmbed(): EmbedBuilder {
+        return new EmbedBuilder()
+            .setTitle(`${this.shortName} - **${this.directive}**`)
+            .setDescription(`Division ends ${formatDate(this.closesAt)}`)
+            .setURL(this.url)
+            .setColor(voteColour(this.freeVote ? ValidVotes.Free : this.whipVote))
+            .setFooter({ text: this.longName });
     }
 }
