@@ -1,0 +1,40 @@
+{
+  "name": "solidarity-whip-bot",
+  "version": "2.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solidaritymhoc/whip-discord-bot.git"
+  },
+  "author": "Liesel D",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/solidaritymhoc/whip-discord-bot/issues"
+  },
+  "homepage": "https://github.com/solidaritymhoc/whip-discord-bot#readme",
+  "dependencies": {
+    "@sapphire/framework": "^4.4.4",
+    "@sapphire/plugin-logger": "^3.0.4",
+    "@sapphire/plugin-subcommands": "^4.0.1",
+    "@sapphire/utilities": "^3.11.2",
+    "date-fns": "^2.30.0",
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.1.4",
+    "moment-timezone": "^0.5.43",
+    "mysql2": "^3.3.3",
+    "reflect-metadata": "^0.1.13",
+    "snoowrap": "^1.23.0",
+    "sqlite3": "^5.1.6",
+    "typeorm": "^0.3.16"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
+  }
+}
