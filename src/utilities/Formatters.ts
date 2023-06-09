@@ -28,3 +28,13 @@ export function voteColour(vote: ValidVotes) {
             return Colors.Greyple; 
     }
 }
+
+export function isValidJson(input: string) {
+    try {
+        JSON.parse(input);
+        return true;
+    }
+    catch {
+        return false;
+    }
+}

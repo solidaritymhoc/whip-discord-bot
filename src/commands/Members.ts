@@ -2,6 +2,7 @@ import { Subcommand } from "@sapphire/plugin-subcommands";
 import { AppDataSource } from "../data-source";
 import { Member } from "../entity/Member";
 import { EmbedBuilder } from "discord.js";
+import { isValidJson } from "../utilities/Formatters";
 
 export class MembersCommand extends Subcommand {
     private memberRepository = AppDataSource.getRepository(Member);
@@ -27,6 +28,10 @@ export class MembersCommand extends Subcommand {
                 {
                     name: 'reminder-channels',
                     chatInputRun: 'chatInputReminderChannels',
+                },
+                {
+                    name: 'import',
+                    chatInputRun: 'chatInputImport',
                 }
             ]
         });
@@ -91,6 +96,17 @@ export class MembersCommand extends Subcommand {
                                 option
                                     .setName('reddit')
                                     .setDescription('Send automatic reminders via Reddit')
+                                    .setRequired(true)
+                            )
+                    )
+                    .addSubcommand((command) => 
+                        command
+                            .setName('import')
+                            .setDescription('Import MPs from JSON list (provided on whip sheet), /help import-formula')
+                            .addStringOption((option) =>
+                                option
+                                    .setName('json')
+                                    .setDescription('The JSON input')
                                     .setRequired(true)
                             )
                     ),
@@ -187,6 +203,19 @@ export class MembersCommand extends Subcommand {
         await this.memberRepository.save(member);
         
         await interaction.editReply({ content: `Edited reminder channels for member ${member.redditUsername}!` });
+    }
+
+    public async chatInputImport(interaction: Subcommand.ChatInputCommandInteraction) {
+        const input = interaction.options.getString('json');
+        if (!input || !isValidJson(input)) {
+            await interaction.reply({ content: 'Please provide valid JSON.' });
+            return;
+        }
+        await interaction.deferReply();
+        
+        console.log(input);
+
+        await interaction.editReply({ content: 'Test' });
     }
 
     private formatReminderChannelsString(member: Member) {
