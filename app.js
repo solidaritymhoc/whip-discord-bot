@@ -106,12 +106,12 @@ client.once(Events.ClientReady, async () => {
 });
 
 // Cron job
-const removeExpiredDivisionsTask = cron.schedule('* * * * * *', async () => await removeExpiredDivisions(), {
+const removeExpiredDivisionsTask = cron.schedule('*/10 * * * *', async () => await removeExpiredDivisions(), {
 	scheduled: true,
 	timezone: 'Europe/London',
 });
 
-// const issueReminderNoticesTask = cron.schedule('*/1 * * * *', async () => await issueReminderNotices(), {
+// const issueReminderNoticesTask = cron.schedule('*/10 * * * *', async () => await issueReminderNotices(), {
 // 	scheduled: true,
 // 	timezone: 'Europe/London',
 // });
