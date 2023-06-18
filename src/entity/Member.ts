@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, Relation } from "typeorm"
+import { Proxy } from "./Proxy"
 
 @Entity()
 export class Member {
@@ -23,4 +24,7 @@ export class Member {
         default: false
     })
     sendRedditReminders: boolean
+
+    @OneToOne(() => Proxy, (proxy) => proxy.member)
+    activeProxy: Relation<Proxy>
 }

@@ -133,7 +133,6 @@ export class MembersCommand extends Subcommand {
         }
         
         await interaction.editReply({ embeds: [responseEmbed] });
-        return;
     }
 
     public async chatInputAdd(interaction: Subcommand.ChatInputCommandInteraction) {
