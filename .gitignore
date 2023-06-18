@@ -133,3 +133,4 @@ dist
 whipConfig.json
 .DS_Store
 *.sqlite
+config/
