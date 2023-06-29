@@ -1,0 +1,3 @@
+interface ImportUsername {
+    username: string
+}

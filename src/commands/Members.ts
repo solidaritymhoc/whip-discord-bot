@@ -102,11 +102,11 @@ export class MembersCommand extends Subcommand {
                     .addSubcommand((command) => 
                         command
                             .setName('import')
-                            .setDescription('Import MPs from JSON list (provided on whip sheet), /help import-formula')
+                            .setDescription('Import MPs from list (provided on whip sheet), /help import-formula')
                             .addStringOption((option) =>
                                 option
-                                    .setName('json')
-                                    .setDescription('The JSON input')
+                                    .setName('input')
+                                    .setDescription('The comma delimited input')
                                     .setRequired(true)
                             )
                     ),
@@ -205,16 +205,25 @@ export class MembersCommand extends Subcommand {
     }
 
     public async chatInputImport(interaction: Subcommand.ChatInputCommandInteraction) {
-        const input = interaction.options.getString('json');
-        if (!input || !isValidJson(input)) {
-            await interaction.reply({ content: 'Please provide valid JSON.' });
+        const input = interaction.options.getString('input');
+        if (!input) {
+            await interaction.reply({ content: 'Please provide valid input.' });
             return;
         }
         await interaction.deferReply();
-        
-        console.log(input);
 
-        await interaction.editReply({ content: 'Test' });
+        const memberUsernames = (await this.memberRepository.find()).map(member => member.redditUsername);
+        var arr = input.split(/[ ,]+/);
+        arr = arr.filter(entry => entry.trim() != '');
+        const usernames = arr.filter(entry => !memberUsernames.includes(entry));
+        for (const i in usernames) {
+            const member = new Member();
+            member.redditUsername = usernames[i];
+            member.sendDiscordReminders = false;
+            await this.memberRepository.save(member);
+        }
+
+        await interaction.editReply({ content: `Added ${arr.length} members excluding duplicates.` });
     }
 
     private formatReminderChannelsString(member: Member) {

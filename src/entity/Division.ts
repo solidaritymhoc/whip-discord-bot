@@ -58,7 +58,7 @@ export class Division {
 
     public get directive(): string {
         if (this.freeVote) return "Free Vote";
-        else return `${this.whipLine} line ${this.whipVote.toUpperCase()}`
+        else return `${this.whipLine} Line ${this.whipVote.toUpperCase()}`
     }
 
     public get whipEmbed(): EmbedBuilder {

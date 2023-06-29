@@ -1,7 +1,11 @@
 import { ValidVotes } from "../enums/ValidVotes";
 
 export class VoteComment {
-    constructor(
-        username: string, vote: ValidVotes
-    ) {}
+    public username: string;
+    public vote: ValidVotes;
+    
+    public constructor(username: string, vote: ValidVotes) {
+        this.username = username;
+        this.vote = vote;
+    }
 }

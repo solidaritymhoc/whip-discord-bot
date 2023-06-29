@@ -26,6 +26,6 @@ export class HelpCommand extends Subcommand {
     }
 
     public async chatInputImportFormula(interaction: Subcommand.ChatInputCommandInteraction) {
-        await interaction.reply('```clean\n=ArrayFormula(concatenate("[", join(", ", char(34)&B5:B54&char(34)), "]"))\n```');
+        await interaction.reply('```=JOIN(",", B5:B54)```');
     }
 }

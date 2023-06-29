@@ -6,10 +6,14 @@ import { Thread } from "./Thread";
 import { container } from "@sapphire/framework";
 import { VoteComment } from "./VoteComment";
 import { commentToVoteEnum } from "../utilities/Formatters";
+import { AppDataSource } from "../data-source";
+import { Member } from "../entity/Member";
 
 const ignore: string[] = [
     'AutoModerator'
 ];
+
+const membersRepository = AppDataSource.getRepository(Member);
 
 const api = new Snoowrap({
     userAgent: 'Solidarity Whip Bot version 2.0.0',
@@ -32,6 +36,7 @@ export async function fetchThread(url: string) {
     const thread = new Thread();
     thread.id = id;
     thread.url = url;
+    const memberUsernames = (await membersRepository.find()).map(member => member.redditUsername);
 
     // Fill title and comments
     try { 
@@ -48,7 +53,7 @@ export async function fetchThread(url: string) {
             // Comments
             thread.comments = [];
             response.comments.forEach(Comment => {
-                if (ignore.includes(Comment.author.name)) {
+                if ((ignore.includes(Comment.author.name)) || !(memberUsernames.includes(Comment.author.name))) {
                     return;
                 }
                 const voteEnum = commentToVoteEnum(Comment.body);
