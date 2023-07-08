@@ -134,3 +134,4 @@ whipConfig.json
 .DS_Store
 *.sqlite
 config/
+.env.dev
