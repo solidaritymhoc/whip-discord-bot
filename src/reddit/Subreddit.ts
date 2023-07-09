@@ -8,6 +8,7 @@ import { VoteComment } from "./VoteComment";
 import { commentToVoteEnum } from "../utilities/Formatters";
 import { AppDataSource } from "../data-source";
 import { Member } from "../entity/Member";
+import dayjs from "dayjs";
 
 const ignore: string[] = [
     'AutoModerator'
@@ -60,6 +61,9 @@ export async function fetchThread(url: string) {
                 if (!voteEnum) return;
                 thread.comments.push(new VoteComment(Comment.author.name, voteEnum))
             });
+
+            // Posted at
+            thread.postedAt = dayjs.unix(response.created_utc);
         });
     }
     catch (e) {

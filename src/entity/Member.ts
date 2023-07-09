@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, Relation } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, Relation, JoinColumn } from "typeorm"
 import { Proxy } from "./Proxy"
+import { Division } from "./Division"
 
 @Entity()
 export class Member {
@@ -27,4 +28,7 @@ export class Member {
 
     @OneToOne(() => Proxy, (proxy) => proxy.member)
     activeProxy: Relation<Proxy>
+
+    @Column({ nullable: true })
+    phaseOutFrom: Date
 }

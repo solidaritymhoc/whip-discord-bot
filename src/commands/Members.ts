@@ -3,6 +3,8 @@ import { AppDataSource } from "../data-source";
 import { Member } from "../entity/Member";
 import { EmbedBuilder } from "discord.js";
 import { isValidJson } from "../utilities/Formatters";
+import { Division } from "../entity/Division";
+import dayjs from 'dayjs';
 
 export class MembersCommand extends Subcommand {
     private memberRepository = AppDataSource.getRepository(Member);
@@ -32,7 +34,11 @@ export class MembersCommand extends Subcommand {
                 {
                     name: 'import',
                     chatInputRun: 'chatInputImport',
-                }
+                },
+                {
+                    name: 'phase-out',
+                    chatInputRun: 'chatInputPhaseOut'
+                },
             ]
         });
     }
@@ -107,6 +113,25 @@ export class MembersCommand extends Subcommand {
                                 option
                                     .setName('input')
                                     .setDescription('The comma delimited input')
+                                    .setRequired(true)
+                            )
+                    )
+                    .addSubcommand((command) =>
+                        command
+                            .setName('phase-out')
+                            .setDescription('Set a division the member will be phased out from.')
+                            .addStringOption((option) =>
+                                option 
+                                    .setName('member')
+                                    .setDescription('The member')
+                                    .setRequired(true)
+                                    .setAutocomplete(true)
+                            )
+                            .addStringOption((option) =>
+                                option
+                                    .setName('datetime')
+                                    .setDescription('YYYY-MM-DD HH:mm e.g. 2023-07-09 10:00')
+                                    .setAutocomplete(false)
                                     .setRequired(true)
                             )
                     ),
@@ -224,6 +249,33 @@ export class MembersCommand extends Subcommand {
         }
 
         await interaction.editReply({ content: `Added ${arr.length} members excluding duplicates.` });
+    }
+
+    public async chatInputPhaseOut(interaction: Subcommand.ChatInputCommandInteraction) {
+        await interaction.deferReply();
+
+        const datetime = interaction.options.getString('datetime');
+        const formattedDateTime = dayjs(datetime);
+        if (!formattedDateTime.isValid()) {
+            await interaction.editReply({ content: 'Datetime invalid. See command option description for the correct format.' });
+            return;
+        }
+
+        const redditUsername = interaction.options.getString('member');
+        if (!redditUsername) {
+            await interaction.editReply({ content: 'Please provide a username.' });
+            return;
+        } 
+        const member = await this.memberRepository.findOneBy({ redditUsername: redditUsername });
+        if (!member) {
+            await interaction.editReply({ content: 'Please provide a valid username.' });
+            return;
+        }
+
+        member.phaseOutFrom = formattedDateTime.toDate();
+        this.memberRepository.save(member);
+
+        await interaction.editReply({ content: `${member.redditUsername} phased out from ${formattedDateTime.toString()}.` });
     }
 
     private formatReminderChannelsString(member: Member) {

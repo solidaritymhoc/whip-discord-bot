@@ -1,7 +1,9 @@
+import { IsNull, LessThan, MoreThan } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { Member } from "../entity/Member";
 import { ValidVotes } from "../enums/ValidVotes";
 import { VoteComment } from "./VoteComment";
+import { Dayjs } from "dayjs";
 
 const membersRepository = AppDataSource.getRepository(Member);
 
@@ -10,6 +12,7 @@ export class Thread {
     shortName: string;
     longName: string;
     url: string;
+    postedAt: Dayjs;
     comments: VoteComment[];
 
     // constructor(
@@ -43,9 +46,15 @@ export class Thread {
     }
 
     public async getMembersNotVoted() {
-        const memberUsernames = (await membersRepository.find()).map(member => member.redditUsername);
+        const members = await membersRepository.find({
+            relations: { activeProxy: true },
+            where: [
+                { phaseOutFrom: MoreThan(this.postedAt.toDate()) },
+                { phaseOutFrom: IsNull() },
+            ]
+        });
         const haveVoted = this.comments.map(comment => comment.username);
-        const notVoted = memberUsernames.filter(username => !haveVoted.some(voted => username === voted));
+        const notVoted = members.map(member => member.redditUsername).filter(username => !haveVoted.some(voted => username === voted));
         return notVoted;
     }
 }
