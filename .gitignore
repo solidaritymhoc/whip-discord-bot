@@ -135,3 +135,4 @@ whipConfig.json
 *.sqlite
 config/
 .env.dev
+.env.prod
