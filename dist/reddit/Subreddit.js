@@ -23,6 +23,7 @@ const VoteComment_1 = require("./VoteComment");
 const Formatters_1 = require("../utilities/Formatters");
 const data_source_1 = require("../data-source");
 const Member_1 = require("../entity/Member");
+const dayjs_1 = __importDefault(require("dayjs"));
 const ignore = [
     'AutoModerator'
 ];
@@ -70,6 +71,8 @@ function fetchThread(url) {
                         return;
                     thread.comments.push(new VoteComment_1.VoteComment(Comment.author.name, voteEnum));
                 });
+                // Posted at
+                thread.postedAt = dayjs_1.default.unix(response.created_utc);
             });
         }
         catch (e) {

@@ -59,7 +59,7 @@ export class MembersCommand extends Subcommand {
                             .addStringOption((option) =>
                                 option 
                                     .setName('reddit-username')
-                                    .setDescription('The member\'s reddit username, without the u/')
+                                    .setDescription('The member\'s reddit username, without the u/. **CASE SENSITIVE**')
                                     .setRequired(true)
                             )
                             .addUserOption((option) => 

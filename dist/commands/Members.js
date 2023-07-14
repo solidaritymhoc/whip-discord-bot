@@ -8,12 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MembersCommand = void 0;
 const plugin_subcommands_1 = require("@sapphire/plugin-subcommands");
 const data_source_1 = require("../data-source");
 const Member_1 = require("../entity/Member");
 const discord_js_1 = require("discord.js");
+const dayjs_1 = __importDefault(require("dayjs"));
 class MembersCommand extends plugin_subcommands_1.Subcommand {
     constructor(context, options) {
         super(context, Object.assign(Object.assign({}, options), { name: 'members', description: 'Members management', subcommands: [
@@ -36,7 +40,11 @@ class MembersCommand extends plugin_subcommands_1.Subcommand {
                 {
                     name: 'import',
                     chatInputRun: 'chatInputImport',
-                }
+                },
+                {
+                    name: 'phase-out',
+                    chatInputRun: 'chatInputPhaseOut'
+                },
             ] }));
         this.memberRepository = data_source_1.AppDataSource.getRepository(Member_1.Member);
     }
@@ -50,7 +58,7 @@ class MembersCommand extends plugin_subcommands_1.Subcommand {
             .setDescription('Add a new member')
             .addStringOption((option) => option
             .setName('reddit-username')
-            .setDescription('The member\'s reddit username, without the u/')
+            .setDescription('The member\'s reddit username, without the u/. **CASE SENSITIVE**')
             .setRequired(true))
             .addUserOption((option) => option
             .setName('discord-user')
@@ -86,6 +94,19 @@ class MembersCommand extends plugin_subcommands_1.Subcommand {
             .addStringOption((option) => option
             .setName('input')
             .setDescription('The comma delimited input')
+            .setRequired(true)))
+            .addSubcommand((command) => command
+            .setName('phase-out')
+            .setDescription('Set a division the member will be phased out from.')
+            .addStringOption((option) => option
+            .setName('member')
+            .setDescription('The member')
+            .setRequired(true)
+            .setAutocomplete(true))
+            .addStringOption((option) => option
+            .setName('datetime')
+            .setDescription('YYYY-MM-DD HH:mm e.g. 2023-07-09 10:00')
+            .setAutocomplete(false)
             .setRequired(true))), { idHints: ['1116156532959232090'] });
     }
     chatInputList(interaction) {
@@ -190,6 +211,30 @@ class MembersCommand extends plugin_subcommands_1.Subcommand {
                 yield this.memberRepository.save(member);
             }
             yield interaction.editReply({ content: `Added ${arr.length} members excluding duplicates.` });
+        });
+    }
+    chatInputPhaseOut(interaction) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield interaction.deferReply();
+            const datetime = interaction.options.getString('datetime');
+            const formattedDateTime = (0, dayjs_1.default)(datetime);
+            if (!formattedDateTime.isValid()) {
+                yield interaction.editReply({ content: 'Datetime invalid. See command option description for the correct format.' });
+                return;
+            }
+            const redditUsername = interaction.options.getString('member');
+            if (!redditUsername) {
+                yield interaction.editReply({ content: 'Please provide a username.' });
+                return;
+            }
+            const member = yield this.memberRepository.findOneBy({ redditUsername: redditUsername });
+            if (!member) {
+                yield interaction.editReply({ content: 'Please provide a valid username.' });
+                return;
+            }
+            member.phaseOutFrom = formattedDateTime.toDate();
+            this.memberRepository.save(member);
+            yield interaction.editReply({ content: `${member.redditUsername} phased out from ${formattedDateTime.toString()}.` });
         });
     }
     formatReminderChannelsString(member) {

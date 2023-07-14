@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Thread = void 0;
+const typeorm_1 = require("typeorm");
 const data_source_1 = require("../data-source");
 const Member_1 = require("../entity/Member");
 const ValidVotes_1 = require("../enums/ValidVotes");
@@ -42,9 +43,15 @@ class Thread {
     }
     getMembersNotVoted() {
         return __awaiter(this, void 0, void 0, function* () {
-            const memberUsernames = (yield membersRepository.find()).map(member => member.redditUsername);
+            const members = yield membersRepository.find({
+                relations: { activeProxy: true },
+                where: [
+                    { phaseOutFrom: (0, typeorm_1.MoreThan)(this.postedAt.toDate()) },
+                    { phaseOutFrom: (0, typeorm_1.IsNull)() },
+                ]
+            });
             const haveVoted = this.comments.map(comment => comment.username);
-            const notVoted = memberUsernames.filter(username => !haveVoted.some(voted => username.toLowerCase() === voted.toLowerCase()));
+            const notVoted = members.map(member => member.redditUsername).filter(username => !haveVoted.some(voted => username === voted));
             return notVoted;
         });
     }

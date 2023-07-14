@@ -137,7 +137,12 @@ class WhipCommand extends plugin_subcommands_1.Subcommand {
                 return;
             }
             const responseEmbed = yield this.createCheckEmbed(division, thread);
-            yield interaction.editReply({ embeds: [responseEmbed] });
+            const pasteableButton = new discord_js_1.ButtonBuilder()
+                .setCustomId('whip-result-pasteable')
+                .setLabel('Pasteable results')
+                .setStyle(discord_js_1.ButtonStyle.Secondary);
+            const actionRow = new discord_js_1.ActionRowBuilder().addComponents(pasteableButton);
+            yield interaction.editReply({ embeds: [responseEmbed], components: [actionRow] });
         });
     }
     chatInputCheckActive(interaction) {

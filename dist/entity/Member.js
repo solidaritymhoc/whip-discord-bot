@@ -44,6 +44,10 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => Proxy_1.Proxy, (proxy) => proxy.member),
     __metadata("design:type", Object)
 ], Member.prototype, "activeProxy", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Date)
+], Member.prototype, "phaseOutFrom", void 0);
 Member = __decorate([
     (0, typeorm_1.Entity)()
 ], Member);

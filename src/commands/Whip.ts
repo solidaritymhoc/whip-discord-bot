@@ -2,7 +2,7 @@ import { Subcommand } from "@sapphire/plugin-subcommands";
 import { AppDataSource } from "../data-source";
 import { Division } from "../entity/Division";
 import { whipIssueChannelId, memberRoleId } from "../whipConfig.json";
-import { ChannelType, EmbedBuilder, TextChannel } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, EmbedBuilder, TextChannel } from "discord.js";
 import { fetchThread } from "../reddit/Subreddit";
 import { ValidVotes } from "../enums/ValidVotes";
 import { Thread } from "../reddit/Thread";
@@ -170,8 +170,14 @@ export class WhipCommand extends Subcommand {
         }
 
         const responseEmbed = await this.createCheckEmbed(division, thread);
+        const pasteableButton = new ButtonBuilder()
+            .setCustomId('whip-result-pasteable')
+            .setLabel('Pasteable results')
+            .setStyle(ButtonStyle.Secondary);
+            
+        const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(pasteableButton);
 
-        await interaction.editReply({ embeds: [responseEmbed] });
+        await interaction.editReply({ embeds: [responseEmbed], components: [actionRow] });
     }
 
     public async chatInputCheckActive(interaction: Subcommand.ChatInputCommandInteraction) {
