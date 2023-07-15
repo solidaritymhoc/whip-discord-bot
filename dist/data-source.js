@@ -9,8 +9,9 @@ exports.AppDataSource = new typeorm_1.DataSource({
     type: 'sqlite',
     database: 'whipbot.sqlite',
     synchronize: true,
-    logging: false,
+    logging: ["error"],
     entities: isTs ? ["src/entity/*.ts"] : ["dist/entity/*.js"],
     migrations: [],
     subscribers: [],
+    logger: "file",
 });
