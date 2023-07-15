@@ -8,7 +8,7 @@ export const AppDataSource = new DataSource({
     database: 'whipbot.sqlite',
     synchronize: true,
     logging: "all",
-    entities: isTs ? ["src/entity/*.ts"] : ["dist/entity/*.js"],
+    entities: isTs ? ["src/entity/*.ts"] : ["entity/*.js"],
     migrations: [],
     subscribers: [],
     logger: "file",
